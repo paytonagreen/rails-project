@@ -7,5 +7,14 @@
 <% end %>
 
 <% if @stock %>
-    <%= @stock.company_name %>
+    <%if @stock %>
+        </br><%= @stock.company_name %></br>
+        $<%= @stock.latest_price %>
+    <%end%>
+<% elsif @nothing %>
+    </br><%= @nothing %></br>
+<%end%>
+
+<% if @error %>
+    </br><%= @error %>
 <%end%>
