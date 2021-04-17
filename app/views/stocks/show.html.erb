@@ -1,8 +1,45 @@
 <p id="notice"><%= notice %></p>
 
+<%@api = StockQuote::Stock.new(api_key: 'sk_3e37f43ac77b4548a61e1b623b0478dc' )%>
+  <% if @stock.ticker %>
+    <% begin %>
+      <% @ticker = StockQuote::Stock.quote(@stock.ticker)%>
+    <% rescue %>
+      <% @ticker = nil %>
+    <% end %>
+    <% if !@ticker %>
+      <% @error = "Hey, that symbol doesn't seem to exist!" %>
+    <% end %>
+  <% end %>
+
+
 <p>
-  <strong>Ticker:</strong>
-  <%= @stock.ticker %>
+  <strong>Name:</strong>
+  <%= @ticker.company_name %>
+</p>
+<p>
+  <strong>Ticker Symbol:</strong>
+  <%= @ticker.symbol %>
+</p>
+<p>
+  <strong>Price:</strong>
+  $<%= @ticker.latest_price %>
+</p>
+<p>
+  <strong>Price Change:</strong>
+  (<%= '+' if (@ticker.change > 0)%><%= @ticker.change%>)
+</p>
+<p>
+  <strong>Percent Change:</strong>
+  <%= number_with_precision(@ticker.change_percent, :precision => 4, :delimiter => ',') %>%
+</p>
+<p>
+  <strong>YTD Change:</strong>
+  <%= number_with_precision(@ticker.ytd_change, :precision => 2, :delimiter => ',') %>%
+</p>
+<p>
+  <strong>Market Cap:</strong>
+  $<%= number_with_precision(@ticker.market_cap, :precision => 2, :delimiter => ',') %>
 </p>
 
 <%= link_to 'Edit', edit_stock_path(@stock) %> |
