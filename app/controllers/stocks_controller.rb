@@ -1,7 +1,7 @@
 class StocksController < ApplicationController
-  before_action :set_stock, only: %i[ show edit update destroy ]
+  before_action :set_stock, only: [ :show, :edit, :update, :destroy ]
+  before_action :correct_user, only: [ :edit, :update, :destroy ]
   before_action :authenticate_user!
-  before-action :correct_user, only: [:edit, :update, :destroy]
 
   # GET /stocks or /stocks.json
   def index
@@ -60,7 +60,7 @@ class StocksController < ApplicationController
 
   def correct_user
     @ticker = current_user.stocks.find_by(id: params[:id])
-    redirect_to stocks_path, notice "Not Authorised to edit this stock" if @ticker.nil?
+    redirect_to stocks_path, notice: "Not Authorised to edit this stock" if @ticker.nil?
   end
 
   private
